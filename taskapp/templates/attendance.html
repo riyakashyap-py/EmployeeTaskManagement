@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Attendance Management</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+<div class="card shadow-lg">
+
+<div class="card-header bg-primary text-white">
+
+<h2 class="mb-0">
+📅 Attendance Management
+</h2>
+
+</div>
+<div class="card shadow mb-4">
+
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">🔍 Search Attendance</h5>
+    </div>
+
+    <div class="card-body">
+
+        <form method="GET">
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <input
+                        type="text"
+                        name="employee"
+                        class="form-control"
+                        placeholder="Search Employee"
+                        value="{{ employee }}">
+                </div>
+
+                <div class="col-md-3">
+                    <input
+                        type="date"
+                        name="date"
+                        class="form-control"
+                        value="{{ date }}">
+                </div>
+
+                <div class="col-md-3">
+
+                    <select
+                        name="status"
+                        class="form-select">
+
+                        <option value="">All Status</option>
+
+                        <option value="Present"
+                        {% if status == "Present" %}selected{% endif %}>
+                            Present
+                        </option>
+
+                        <option value="Absent"
+                        {% if status == "Absent" %}selected{% endif %}>
+                            Absent
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <button class="btn btn-primary w-100">
+
+                        Search
+
+                    </button>
+
+                </div>
+<div class="mt-3 mb-3">
+
+<a href="{% url 'attendance_excel' %}"
+class="btn btn-success">
+
+📥 Export Attendance Excel
+
+</a>
+<a href="{% url 'attendance_pdf' %}"
+class="btn btn-danger">
+
+📄 Export PDF
+
+</a>
+
+</div>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<div class="card-body">
+<div class="row mt-4 mb-4">
+
+    <div class="col-md-4">
+        <div class="card bg-primary text-white shadow">
+            <div class="card-body text-center">
+                <h5>Total Attendance</h5>
+                <h2>{{ total_attendance }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-success text-white shadow">
+            <div class="card-body text-center">
+                <h5>Present</h5>
+                <h2>{{ present_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-danger text-white shadow">
+            <div class="card-body text-center">
+                <h5>Absent</h5>
+                <h2>{{ absent_count }}</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+
+<label>Employee</label>
+
+{{ form.employee }}
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label>Date</label>
+
+{{ form.date }}
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label>Status</label>
+
+{{ form.status }}
+
+</div>
+
+</div>
+
+<button class="btn btn-success">
+
+💾 Save Attendance
+
+</button>
+
+<a href="{% url 'employee_list' %}" class="btn btn-secondary">
+
+⬅ Dashboard
+
+</a>
+
+</form>
+
+</div>
+
+</div>
+
+<br>
+
+<div class="card shadow">
+
+<div class="card-header bg-success text-white">
+
+<h4 class="mb-0">
+
+Attendance History
+
+</h4>
+
+</div>
+
+<div class="card-body">
+
+<table class="table table-striped table-hover">
+<thead class="table-dark">
+<tr>
+    <th>Employee</th>
+    <th>Date</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for a in attendance %}
+
+<tr>
+
+    <td>{{ a.employee.name }}</td>
+
+    <td>{{ a.date }}</td>
+
+    <td>
+        {% if a.status == "Present" %}
+            <span class="badge bg-success">Present</span>
+        {% else %}
+            <span class="badge bg-danger">Absent</span>
+        {% endif %}
+    </td>
+
+    <td>
+
+        <a href="{% url 'edit_attendance' a.id %}"
+           class="btn btn-warning btn-sm">
+            Edit
+        </a>
+
+        <a href="{% url 'delete_attendance' a.id %}"
+           class="btn btn-danger btn-sm">
+            Delete
+        </a>
+
+    </td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+
+<td colspan="4" class="text-center">
+
+No Attendance Found
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

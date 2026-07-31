@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Detail</title>
+</head>
+<body>
+
+<h1>Employee Details</h1>
+{% if employee.photo %}
+<div class="text-center mb-3">
+    <img src="{{ employee.photo.url }}"
+         class="rounded-circle shadow"
+         width="180"
+         height="180">
+</div>
+{% endif %}
+
+<p><b>Name:</b> {{ employee.name }}</p>
+
+<p><b>Email:</b> {{ employee.email }}</p>
+
+<p><b>Phone:</b> {{ employee.phone }}</p>
+
+<p><b>Department:</b> {{ employee.department }}</p>
+
+<p><b>Designation:</b> {{ employee.designation }}</p>
+
+<br>
+
+<a href="{% url 'employee_list' %}">
+Back
+</a>
+
+</body>
+</html>
